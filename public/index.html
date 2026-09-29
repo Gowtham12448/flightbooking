@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indian Flight Ticket Booking</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(145deg, #f0f4ff 0%, #e6edf9 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .booking-card {
+      background: #ffffff;
+      max-width: 1000px;
+      width: 100%;
+      border-radius: 2.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 20, 40, 0.35);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      transition: transform 0.2s ease;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #0b2b5c 0%, #1a4a8b 100%);
+      padding: 1.8rem 2.5rem;
+      color: white;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header h1 {
+      font-size: 1.9rem;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .header h1 span {
+      background: #ffb347;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0.3rem 0.9rem;
+      border-radius: 40px;
+      color: #0b2b5c;
+      letter-spacing: 0.3px;
+    }
+
+    .header .tagline {
+      font-size: 1rem;
+      opacity: 0.9;
+      font-weight: 400;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 0.4rem 1.2rem;
+      border-radius: 30px;
+    }
+
+    .search-section {
+      background: #f9fcff;
+      padding: 2.2rem 2.5rem 1.8rem;
+      border-bottom: 1px solid #dbe6f2;
+    }
+
+    .trip-type {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .trip-type label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      color: #1f3a5f;
+      cursor: pointer;
+    }
+
+    .trip-type input[type="radio"] {
+      accent-color: #1a4a8b;
+      width: 1.1rem;
+      height: 1.1rem;
+      cursor: pointer;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .input-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: #2b4b77;
+    }
+
+    .input-group input,
+    .input-group select {
+      padding: 0.85rem 1rem;
+      border: 1.5px solid #cbd9e9;
+      border-radius: 1rem;
+      font-size: 1rem;
+      background: white;
+      transition: all 0.2s;
+      color: #0d2c4b;
+      font-weight: 500;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      outline: none;
+      border-color: #1a4a8b;
+      box-shadow: 0 0 0 4px rgba(26, 74, 139, 0.15);
+    }
+
+    .input-group input::placeholder {
+      color: #97aec9;
+      font-weight: 400;
+    }
+
+    .swap-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: #1a4a8b;
+      font-weight: 600;
+      padding-top: 1.2rem;
+    }
+
+    .search-btn {
+      background: #ffb347;
+      color: #0b2b5c;
+      border: none;
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 3rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 8px 18px -6px rgba(255, 180, 71, 0.5);
+      width: 100%;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+
+    .search-btn:hover {
+      background: #ffa726;
+      transform: scale(1.01);
+      box-shadow: 0 12px 22px -8px rgba(255, 160, 30, 0.7);
+    }
+
+    .results-section {
+      padding: 2rem 2.5rem 2.5rem;
+      background: white;
+    }
+
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .results-header h2 {
+      font-size: 1.4rem;
+      color: #0b2b5c;
+      font-weight: 600;
+    }
+
+    .results-header .badge {
+      background: #e2ebf6;
+      padding: 0.4rem 1.2rem;
+      border-radius: 40px;
+      color: #1a4a8b;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .flight-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .flight-card {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      background: #f9fcff;
+      border: 1.5px solid #dbe6f2;
+      border-radius: 1.5rem;
+      padding: 1.2rem 1.6rem;
+      transition: all 0.2s;
+    }
+
+    .flight-card:hover {
+      border-color: #a5c0e0;
+      background: #f4f9ff;
+      box-shadow: 0 8px 18px -10px #0b2b5c33;
+    }
+
+    .airline {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      min-width: 180px;
+    }
+
+    .airline-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: #1a4a8b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: 0 6px 12px -4px #1a4a8b66;
+    }
+
+    .airline-info h3 {
+      font-size: 1.15rem;
+      color: #0b2b5c;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .airline-info .flight-no {
+      font-size: 0.85rem;
+      color: #5f7d9e;
+      font-weight: 500;
+    }
+
+    .timing {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      margin: 0.5rem 0;
+    }
+
+    .time-block {
+      text-align: center;
+    }
+
+    .time-block .time {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #0b2b5c;
+    }
+
+    .time-block .airport {
+      font-size: 0.8rem;
+      color: #5f7d9e;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .duration {
+      font-size: 0.8rem;
+      color: #6d8cb0;
+      background: #e2ebf6;
+      padding: 0.3rem 0.8rem;
+      border-radius: 30px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .price-section {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .price {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #0b2b5c;
+      letter-spacing: -1px;
+    }
+
+    .price small {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #6d8cb0;
+      letter-spacing: 0;
+    }
+
+    .book-btn {
+      background: #0b2b5c;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.8rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border-radius: 2.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      box-shadow: 0 6px 12px -4px #0b2b5c66;
+    }
+
+    .book-btn:hover {
+      background: #1a4a8b;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 18px -6px #0b2b5c99;
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #7a97b9;
+      border-top: 1px solid #dbe6f2;
+      padding-top: 1.5rem;
+    }
+
+    /* static demo note */
+    .demo-note {
+      background: #fff6e5;
+      border-radius: 40px;
+      padding: 0.3rem 1.2rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #8a6d2b;
+      display: inline-block;
+    }
+
+    @media (max-width: 750px) {
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+        padding: 1.5rem;
+      }
+
+      .search-section,
+      .results-section {
+        padding: 1.5rem;
+      }
+
+      .flight-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .price-section {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .timing {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="booking-card">
+    <div class="header">
+      <h1>
+        ✈️ Indian Skies
+        <span>DOMESTIC</span>
+      </h1>
+      <div class="tagline">book your flight in seconds</div>
+    </div>
+
+    <!-- search form — static, no backend -->
+    <div class="search-section">
+      <div class="trip-type">
+        <label>
+          <input type="radio" name="trip" value="oneway" checked> One Way
+        </label>
+        <label>
+          <input type="radio" name="trip" value="round"> Round Trip
+        </label>
+      </div>
+
+      <div class="form-grid">
+        <div class="input-group">
+          <label>From</label>
+          <input type="text" value="Delhi (DEL)" placeholder="Departure city">
+        </div>
+        <div class="input-group">
+          <label>To</label>
+          <input type="text" value="Mumbai (BOM)" placeholder="Arrival city">
+        </div>
+        <div class="input-group">
+          <label>Departure</label>
+          <input type="date" value="2025-06-15">
+        </div>
+        <div class="input-group">
+          <label>Return</label>
+          <input type="date" value="2025-06-22">
+        </div>
+        <div class="input-group">
+          <label>Passengers</label>
+          <select>
+            <option>1 Adult</option>
+            <option selected>2 Adults</option>
+            <option>3 Adults</option>
+            <option>1 Adult, 1 Child</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="search-btn">
+        🔍 Search Flights
+      </button>
+    </div>
+
+    <!-- static flight results -->
+    <div class="results-section">
+      <div class="results-header">
+        <h2>Available flights</h2>
+        <div class="badge">15 Jun 2025 · DEL → BOM</div>
+      </div>
+
+      <div class="flight-list">
+        <!-- Flight 1: Air India -->
+        <div class="flight-card">
+          <div class="airline">
+            <div class="airline-logo">AI</div>
+            <div class="airline-info">
+              <h3>Air India</h3>
+              <div class="flight-no">AI 805 · Boeing 787</div>
+            </div>
+          </div>
+
+          <div class="timing">
+            <div class="time-block">
+              <div class="time">06:20</div>
+              <div class="airport">DEL</div>
+            </div>
+            <div class="duration">2h 15m</div>
+            <div class="time-block">
+              <div class="time">08:35</div>
+              <div class="airport">BOM</div>
+            </div>
+          </div>
+
+          <div class="price-section">
+            <div class="price">₹4,850 <small>incl. taxes</small></div>
+            <button class="book-btn">Book</button>
+          </div>
+        </div>
+
+        <!-- Flight 2: IndiGo -->
+        <div class="flight-card">
+          <div class="airline">
+            <div class="airline-logo">6E</div>
+            <div class="airline-info">
+              <h3>IndiGo</h3>
+              <div class="flight-no">6E 2134 · A320neo</div>
+            </div>
+          </div>
+
+          <div class="timing">
+            <div class="time-block">
+              <div class="time">09:50</div>
+              <div class="airport">DEL</div>
+            </div>
+            <div class="duration">2h 05m</div>
+            <div class="time-block">
+              <div class="time">11:55</div>
+              <div class="airport">BOM</div>
+            </div>
+          </div>
+
+          <div class="price-section">
+            <div class="price">₹3,999 <small>incl. taxes</small></div>
+            <button class="book-btn">Book</button>
+          </div>
+        </div>
+
+        <!-- Flight 3: Vistara -->
+        <div class="flight-card">
+          <div class="airline">
+            <div class="airline-logo">UK</div>
+            <div class="airline-info">
+              <h3>Vistara</h3>
+              <div class="flight-no">UK 945 · A321neo</div>
+            </div>
+          </div>
+
+          <div class="timing">
+            <div class="time-block">
+              <div class="time">14:25</div>
+              <div class="airport">DEL</div>
+            </div>
+            <div class="duration">2h 10m</div>
+            <div class="time-block">
+              <div class="time">16:35</div>
+              <div class="airport">BOM</div>
+            </div>
+          </div>
+
+          <div class="price-section">
+            <div class="price">₹5,200 <small>incl. taxes</small></div>
+            <button class="book-btn">Book</button>
+          </div>
+        </div>
+
+        <!-- Flight 4: SpiceJet -->
+        <div class="flight-card">
+          <div class="airline">
+            <div class="airline-logo">SG</div>
+            <div class="airline-info">
+              <h3>SpiceJet</h3>
+              <div class="flight-no">SG 8197 · Q400</div>
+            </div>
+          </div>
+
+          <div class="timing">
+            <div class="time-block">
+              <div class="time">18:10</div>
+              <div class="airport">DEL</div>
+            </div>
+            <div class="duration">2h 30m</div>
+            <div class="time-block">
+              <div class="time">20:40</div>
+              <div class="airport">BOM</div>
+            </div>
+          </div>
+
+          <div class="price-section">
+            <div class="price">₹3,450 <small>incl. taxes</small></div>
+            <button class="book-btn">Book</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-note">
+        <span class="demo-note">STATIC DEMO</span> — no real booking, just UI for container demo
+      </div>
+    </div>
+  </div>
+</body>
+</html>
